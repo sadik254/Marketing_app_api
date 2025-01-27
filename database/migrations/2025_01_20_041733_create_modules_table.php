@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('module_name');
             $table->string('module_file');
+            $table->string('model_name');
             $table->timestamps();
         });
     }

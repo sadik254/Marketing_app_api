@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('module_id');
-            $table->integer('read_permission');
-            $table->integer('write_permission');
-            $table->integer('delete_permission');
+            $table->boolean('read_permission');
+            $table->boolean('write_permission');
+            $table->boolean('delete_permission');
             $table->timestamps();
 
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
