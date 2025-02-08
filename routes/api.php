@@ -18,8 +18,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
     // Route::get('/roles/{id}', [RoleController::class, 'show'])->name('roles.show');
-    Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
-    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update'); //Won't use this route for now. 
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy'); //Have to add another check if the user is super_admin or not
 });
 
  // Routes for Modules
