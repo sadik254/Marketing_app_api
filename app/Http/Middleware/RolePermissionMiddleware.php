@@ -4,33 +4,37 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use App\Models\Module;
 
 class RolePermissionMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  mixed  ...$permissions
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next, $moduleId, $permissionType)
+    public function handle(Request $request, Closure $next, ...$permissions)
     {
-        $user = auth()->user();
 
-        // Check if module exists
-        $module = Module::find($moduleId);
-        if (!$module) {
-            abort(404, 'Module not found.');
+        // \Log::info('Middleware triggered');
+        // \Log::info('User:', [$request->user()]);
+        // \Log::info('Permissions to check:', $permissions);
+        // \Log::info('User Roles:', $request->user()->getRoleNames()->toArray());
+        // \Log::info('User Permissions:', $request->user()->getAllPermissions()->pluck('name')->toArray());
+
+        // Skip permission check for Super Admin
+        if ($request->user()->hasRole('super_admin')) {
+            return $next($request);
         }
 
         // Check if the user has the required permission
-        $hasPermission = hasPermissionForModule($user->role_id, $moduleId, $permissionType);
-
-        if (!$hasPermission) {
-            abort(403, 'Role and permission mismatch.');
+        if (!$request->user()->can($permissions)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         return $next($request);
     }
 }
+

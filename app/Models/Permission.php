@@ -2,27 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
-class Permission extends Model
+class Permission extends SpatiePermission
 {
-    protected $fillable = [
-        'role_id',
-        'module_id',
-        'read_permission',
-        'write_permission',
-        'delete_permission',
-    ];
-
-    protected $casts = [
-        'read_permission' => 'boolean',
-        'write_permission' => 'boolean',
-        'delete_permission' => 'boolean',
-    ];
-
-    // Define relationship with permissions
-    public function permissions()
-    {
-        return $this->hasMany(Permission::class, 'role_id');
-    }
+    use HasFactory;
 }
