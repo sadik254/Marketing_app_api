@@ -32,6 +32,11 @@ class UserController extends Controller
 
         $user = User::create($data);
         // Log::info('User Created: ', $user->toArray());
+
+        // Assign the specified role to the user
+        $roleName = $request->input('role');
+        $user->assignRole($roleName);
+        
         // Creating Sanctum token for the registered user
         $plainTextToken = $user->createToken('UserRegister')->plainTextToken;
         $token = explode('|', $plainTextToken)[1];

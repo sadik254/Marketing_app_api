@@ -3,9 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\CustomerController;
 
 
 Route::post('/register', [UserController::class, 'register']);
@@ -41,3 +40,11 @@ Route::middleware('role_or_permission:user_read')->get('/test', function () {
 
 //     return response()->json(['message' => 'User does not have user_read permission'], 403);
 // });
+
+// Customer Routes
+Route::middleware('auth:sanctum', 'role_or_permission:customer_read')->get('/customers', [CustomerController::class, 'index']);
+Route::middleware('auth:sanctum', 'role_or_permission:customer_read')->get('/customers/{id}', [CustomerController::class, 'show']);
+Route::middleware('auth:sanctum', 'role_or_permission:customer_write')->post('/customers', [CustomerController::class, 'create']);
+Route::middleware('auth:sanctum', 'role_or_permission:customer_update')->post('/customers/{id}', [CustomerController::class, 'update']);
+Route::middleware('auth:sanctum', 'role_or_permission:customer_delete')->delete('/customers/{id}', [CustomerController::class, 'delete']);
+
