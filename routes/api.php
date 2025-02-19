@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\CustomerController;
-
+use App\Http\Controllers\CompanyController;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
@@ -19,9 +19,9 @@ Route::middleware('auth:sanctum', 'role_or_permission:user_read')->get('/users',
 // Call this route once to create roles and permissions
 Route::get('/setup-roles-permissions', [RolePermissionController::class, 'setupPermissions']);
 // Assing Permissions to role
-Route::post('/assign-permissions', [RolePermissionController::class, 'assignPermissionsToRole']);
+Route::middleware('auth:sanctum', 'role_or_permission:role_assign')->post('/assign-permissions', [RolePermissionController::class, 'assignPermissionsToRole']);
 
-Route::middleware('role_or_permission:user_read')->get('/test', function () {
+Route::middleware('auth:sanctum','role_or_permission:role_assign')->get('/test', function () {
     return response()->json(['message' => 'Middleware is working!']);
 });
 
@@ -48,3 +48,7 @@ Route::middleware('auth:sanctum', 'role_or_permission:customer_write')->post('/c
 Route::middleware('auth:sanctum', 'role_or_permission:customer_update')->post('/customers/{id}', [CustomerController::class, 'update']);
 Route::middleware('auth:sanctum', 'role_or_permission:customer_delete')->delete('/customers/{id}', [CustomerController::class, 'delete']);
 
+// Company Routes
+Route::middleware('auth:sanctum', 'role_or_permission:company_read')->get('/company', [CompanyController::class, 'show']);
+Route::middleware('auth:sanctum', 'role_or_permission:company_update')->post('/company', [CompanyController::class, 'update']);
+Route::middleware('auth:sanctum', 'role_or_permission:company_delete')->delete('/company', [CompanyController::class, 'delete']);
