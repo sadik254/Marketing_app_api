@@ -49,6 +49,6 @@ Route::middleware('auth:sanctum', 'role_or_permission:customer_update')->post('/
 Route::middleware('auth:sanctum', 'role_or_permission:customer_delete')->delete('/customers/{id}', [CustomerController::class, 'delete']);
 
 // Company Routes
-Route::middleware('auth:sanctum', 'role_or_permission:company_read')->get('/company', [CompanyController::class, 'show']);
+Route::get('/company', [CompanyController::class, 'show']);
 Route::middleware('auth:sanctum', 'role_or_permission:company_update')->post('/company', [CompanyController::class, 'update']);
 Route::middleware('auth:sanctum', 'role_or_permission:company_delete')->delete('/company', [CompanyController::class, 'delete']);
