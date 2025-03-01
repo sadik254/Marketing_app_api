@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\BookingController;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
@@ -52,3 +53,10 @@ Route::middleware('auth:sanctum', 'role_or_permission:customer_delete')->delete(
 Route::get('/company', [CompanyController::class, 'show']);
 Route::middleware('auth:sanctum', 'role_or_permission:company_update')->post('/company', [CompanyController::class, 'update']);
 Route::middleware('auth:sanctum', 'role_or_permission:company_delete')->delete('/company', [CompanyController::class, 'delete']);
+
+// Booking Routes
+Route::middleware('auth:sanctum')->get('/bookings', [BookingController::class, 'index']);
+Route::middleware('auth:sanctum')->post('/bookings', [BookingController::class, 'store']);
+Route::middleware('auth:sanctum')->get('/bookings/{id}', [BookingController::class, 'show']);
+Route::middleware('auth:sanctum')->put('/bookings/{id}', [BookingController::class, 'update']);
+Route::middleware('auth:sanctum')->delete('/bookings/{id}', [BookingController::class, 'destroy']);
