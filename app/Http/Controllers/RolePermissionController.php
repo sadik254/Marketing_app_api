@@ -16,7 +16,7 @@ class RolePermissionController extends Controller
         $user = Role::create(['name' => 'user']);
 
         // Define models that need permissions
-        $models = ['user', 'customer']; // Add more as needed
+        $models = ['user', 'customer', 'company', 'booking']; // Add more as needed
         $actions = ['read', 'write', 'update', 'delete'];
 
         // Create permissions dynamically
