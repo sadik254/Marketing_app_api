@@ -42,6 +42,11 @@ class CompanyController extends Controller
             'phone' => 'nullable|string|max:20',
             'logo' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048', // Validate the uploaded file
             'remarks' => 'nullable|string',
+            'facebook_url' => 'nullable|string',
+            'instagram_url' => 'nullable|string',
+            'linkedin_url' => 'nullable|string',
+            'playstore_url' => 'nullable|string',
+            'appstore_url' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -71,7 +76,7 @@ class CompanyController extends Controller
 
         // Update other fields
         $company->fill($request->only([
-            'company_name', 'company_address', 'email', 'phone', 'remarks'
+            'company_name', 'company_address', 'email', 'phone', 'remarks', 'facebook_url', 'instagram_url', 'linkedin_url', 'playstore_url', 'appstore_url',
         ]));
 
         $company->save();

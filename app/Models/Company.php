@@ -18,6 +18,11 @@ class Company extends Model
         'phone',
         'logo',
         'remarks',
+        'facebook_url',
+        'instagram_url',
+        'linkedin_url',
+        'playstore_url',
+        'appstore_url',
     ];
 
     /**

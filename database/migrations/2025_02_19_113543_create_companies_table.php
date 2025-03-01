@@ -19,6 +19,11 @@ class CreateCompaniesTable extends Migration
             $table->string('phone')->nullable();
             $table->string('logo')->nullable(); // Store the logo file path
             $table->text('remarks')->nullable();
+            $table->text('facebook_url')->nullable();
+            $table->text('instagram_url')->nullable();
+            $table->text('linkedin_url')->nullable();
+            $table->text('playstore_url')->nullable();
+            $table->text('appstore_url')->nullable();
             $table->timestamps();
         });
     }
