@@ -60,3 +60,4 @@ Route::middleware('auth:sanctum')->post('/bookings', [BookingController::class, 
 Route::middleware('auth:sanctum')->get('/bookings/{id}', [BookingController::class, 'show']);
 Route::middleware('auth:sanctum')->put('/bookings/{id}', [BookingController::class, 'update']);
 Route::middleware('auth:sanctum')->delete('/bookings/{id}', [BookingController::class, 'destroy']);
+Route::middleware('auth:sanctum')->get('/bookings-filter', [BookingController::class, 'filter']);

@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Booking;
+use App\Models\Company;
+use App\Mail\BookingTemplateOne;
+use App\Mail\BookingTemplateTwo;
+Use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
@@ -34,11 +39,22 @@ class BookingController extends Controller
             'vehicle_type'        => 'nullable|string|max:255',
             'booking_status'      => 'nullable|string|max:50',
             'remarks'             => 'nullable|string',
+            'template'            => 'required|in:1,2',
         ]);
 
         $booking = Booking::create($validatedData);
 
-        return response()->json(['message' => 'Booking created successfully', 'data' => $booking], 201);
+        // Choose email template based on request
+        if ($request->template == '1') {
+            Mail::to($booking->email)->send(new BookingTemplateOne($booking));
+        } else {
+            Mail::to($booking->email)->send(new BookingTemplateTwo($booking));
+        }
+
+        return response()->json([
+            'message' => 'Booking created successfully', 
+            'data' => $booking
+        ], 201);
     }
 
 
@@ -102,5 +118,40 @@ class BookingController extends Controller
         $booking->delete();
 
         return response()->json(['message' => 'Booking deleted successfully']);
+    }
+
+    // Universal filter
+    public function filter(Request $request)
+    {
+        // Retrieve the search query from the request
+        $search = $request->query('search');
+
+        // Validate that a search query is provided
+        if (!$search) {
+            return response()->json(['message' => 'Please provide a search query'], 400);
+        }
+
+        // Start building the query
+        $query = Booking::query();
+
+        // Define the fields you want to search
+        $searchableFields = [
+            'id', 'name', 'email', 'phone', 'booking_date', 'booking_time',
+            'pickup_date', 'pickup_time', 'pickup_location', 'dropoff_location',
+            'number_of_passengers', 'vehicle_type', 'booking_status', 'remarks'
+        ];
+
+        // Apply the search logic with a case-insensitive search for MySQL
+        $query->where(function ($q) use ($searchableFields, $search) {
+            foreach ($searchableFields as $field) {
+                $q->orWhere(DB::raw("LOWER({$field})"), 'LIKE', "%" . strtolower($search) . "%");
+            }
+        });
+
+        // Paginate the results
+        $bookings = $query->paginate(10);
+
+        // Return the paginated results as JSON
+        return response()->json($bookings);
     }
 }
